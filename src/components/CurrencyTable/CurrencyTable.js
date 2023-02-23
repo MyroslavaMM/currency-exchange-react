@@ -21,8 +21,8 @@ function CurrencyTable() {
             return(
                 <tr className="row" key={ccy}>
                     <td className="headlines-item item">{ccy}/{base_ccy}</td>
-                    <td className="buy item">{buy}</td>
-                    <td className="sale item">{sale}</td>
+                    <td className="buy item">{Number(buy).toFixed(2)}</td>
+                    <td className="sale item">{Number(sale).toFixed(2)}</td>
                 </tr>
             )
         })
