@@ -1,32 +1,43 @@
 import React from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { getExchangeValues, selectExchangeValues } from "../../reducers/exchangeReducer/index";
 import './CurrencyTable.css';
 
 function CurrencyTable() {
+    const dispatch = useDispatch();
+    const currency = useSelector(selectExchangeValues);
+
+    useEffect(() => {
+        dispatch(getExchangeValues());
+    }, []);
+
+    if (currency.length === 0) {
+        return <p>Loading...</p>
+    }
+
+    const renderValues = () => {
+        return currency.map(({buy, sale, ccy, base_ccy}) => {
+            return(
+                <tr className="row" key={ccy}>
+                    <td className="headlines-item item">{ccy}/{base_ccy}</td>
+                    <td className="buy item">{buy}</td>
+                    <td className="sale item">{sale}</td>
+                </tr>
+            )
+        })
+    }
     return (
         <table className="table">
             <thead className="headlines">
                 <tr className="row">
                     <td className="headlines-item item">Currency/Current Date</td>
                     <td className="headlines-item item">Buy</td>
-                    <td className="headlines-item item">Sell</td>
+                    <td className="headlines-item item">Sale</td>
                 </tr>
             </thead>
             <tbody>
-                <tr className="row">
-                    <td className="headlines-item item">USD/UAH</td>
-                    <td className="buy item">22</td>
-                    <td className="sell item">24</td>
-                </tr>
-                <tr className="row">
-                    <td className="headlines-item item">EUR/UEA</td>
-                    <td className="buy item">32</td>
-                    <td className="sell item">34</td>
-                </tr>
-                <tr className="row">
-                    <td className="headlines-item item">BTC/USD</td>
-                    <td className="buy item">11111</td>
-                    <td className="sell item">11700</td>
-                </tr>
+                {renderValues()}
             </tbody>
         </table>
     )
