@@ -1,0 +1,16 @@
+.table {
+    margin: 5rem auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.headlines,
+.row,
+.item {
+    border: 1px solid black;
+}
+
+.item {
+    padding: 2rem;
+    text-align: center;
+}

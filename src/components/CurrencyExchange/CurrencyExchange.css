@@ -1,0 +1,23 @@
+.exchangeForm {
+    margin: 5rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.exchangeBlock {
+    display: flex;
+    flex-direction: row;
+}
+
+.inputBlock {
+    display: flex;
+    flex-direction: column;
+}
+
+.exchangeInput,
+.select {
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
