@@ -75,7 +75,7 @@ function CurrencyTable() {
       let buyNumber = Number(buy).toFixed(2);
       let saleNumber = Number(sale).toFixed(2);
       return (
-        <tr className="row" key={ccy}>
+        <tr className="row-item" key={ccy}>
           <td className="headlines-item item">
             {ccy}/{base_ccy}
           </td>
@@ -97,12 +97,12 @@ function CurrencyTable() {
   };
 
   return (
-    <table className="table">
+    <table className="table-item ">
       <thead className="headlines">
-        <tr className="row">
-          <td className="headlines-item item">Currency/Current Date</td>
-          <td className="headlines-item item">Buy</td>
-          <td className="headlines-item item">Sale</td>
+        <tr className="row-item">
+          <th className="headlines-item item">Currency/Current Date</th>
+          <th className="headlines-item item">Buy</th>
+          <th className="headlines-item item">Sale</th>
         </tr>
       </thead>
       <tbody>{renderValues()}</tbody>

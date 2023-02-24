@@ -67,19 +67,26 @@ function CurrencyExchange() {
   return (
     <form className="exchangeForm">
       <div className="exchangeBlock">
-        <input className="exchangeInput" onChange={handleChangeFromValue} value={changeFrom} type="number" placeholder="Change" name="change"></input>
-        <select value={fromOption} onChange={handlerGetFromOption} className="select">
+        <input
+          className="exchangeInput form-control"
+          onChange={handleChangeFromValue}
+          value={changeFrom}
+          type="number"
+          placeholder="Change"
+          name="change"
+        ></input>
+        <select value={fromOption} onChange={handlerGetFromOption} className="select form-select form-select-sm" aria-label=".form-select-sm example">
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
           <option value="UAH">UAH</option>
         </select>
       </div>
-      <button className="exchangeButton" onClick={reverceInput}>
+      <button className="exchangeButton btn btn-info" onClick={reverceInput}>
         ⇆
       </button>
       <div className="exchangeBlock">
-        <input className="exchangeInput" onChange={handleChangeToValue} value={changeTo} type="number" placeholder="Get" name="get"></input>
-        <select value={toOption} onChange={handlerGetToOption} className="select">
+        <input className="exchangeInput form-control" onChange={handleChangeToValue} value={changeTo} type="number" placeholder="Get" name="get"></input>
+        <select value={toOption} onChange={handlerGetToOption} className="select form-select form-select-sm" aria-label=".form-select-sm example">
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
           <option value="UAH">UAH</option>
