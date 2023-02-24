@@ -1,5 +1,6 @@
 .table-item {
     margin: 5rem auto;
+    font-family: initial;
 }
 
 .row-item,
@@ -8,7 +9,7 @@
 }
 
 .item {
-    padding: 1rem;
+    padding: 0.5rem;
     text-align: center;
 }
 

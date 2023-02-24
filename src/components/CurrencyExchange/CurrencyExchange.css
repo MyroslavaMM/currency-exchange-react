@@ -10,14 +10,6 @@
     flex-direction: row;
 }
 
-.inputBlock {
-    display: flex;
-    flex-direction: column;
-}
-
-.exchangeInput,
-.select {
-    width: 100%;
-    height: auto;
-    box-sizing: border-box;
+.exchangeButton {
+    width: 10%;
 }
