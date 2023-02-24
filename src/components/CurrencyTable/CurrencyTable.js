@@ -1,46 +1,113 @@
 import React from "react";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { getExchangeValues, selectExchangeValues } from "../../reducers/exchangeReducer/index";
-import './CurrencyTable.css';
+import "./CurrencyTable.css";
 
 function CurrencyTable() {
-    const dispatch = useDispatch();
-    const currency = useSelector(selectExchangeValues);
+  const dispatch = useDispatch();
+  const currency = useSelector(selectExchangeValues);
 
-    useEffect(() => {
-        dispatch(getExchangeValues());
-    }, []);
+  const [newValue, setNewValue] = useState("");
+  let [count, setCount] = useState(0);
+  const increment = () => setCount(count++);
 
-    if (currency.length === 0) {
-        return <p>Loading...</p>
-    }
+  useEffect(() => {
+    dispatch(getExchangeValues());
+    increment();
+    window.localStorage.setItem("count", count);
+  }, []);
 
-    const renderValues = () => {
-        return currency.map(({buy, sale, ccy, base_ccy}) => {
-            return(
-                <tr className="row" key={ccy}>
-                    <td className="headlines-item item">{ccy}/{base_ccy}</td>
-                    <td className="buy item">{Number(buy).toFixed(2)}</td>
-                    <td className="sale item">{Number(sale).toFixed(2)}</td>
-                </tr>
-            )
-        })
+  const handleClickEdit = (e) => {
+    const child = e.currentTarget;
+    const parent = child.parentNode;
+    let input = parent.childNodes[0];
+
+    child.style.display = "none";
+
+    const span = document.createElement("span");
+    span.innerHTML = "✕";
+    span.classList.add("cross");
+    span.classList.add("icon");
+
+    parent.appendChild(span);
+
+    span.addEventListener("click", () => {
+      span.style.display = "none";
+      child.style.display = "inline-block";
+      input.disabled = true;
+    });
+
+    input.disabled = false;
+  };
+
+  const changeValue = (e) => {
+    const currencyValue = e.target.value;
+    setNewValue(currencyValue);
+  };
+
+  const resetStorageValues = () => {
+    localStorage.clear();
+  };
+
+  const table = document.getElementsByClassName("table");
+
+  if (localStorage.getItem("count") === "5") {
+    if (table.length > 0) {
+      table[0].style.display = "none";
     }
     return (
-        <table className="table">
-            <thead className="headlines">
-                <tr className="row">
-                    <td className="headlines-item item">Currency/Current Date</td>
-                    <td className="headlines-item item">Buy</td>
-                    <td className="headlines-item item">Sale</td>
-                </tr>
-            </thead>
-            <tbody>
-                {renderValues()}
-            </tbody>
-        </table>
-    )
+      <div className="error">
+        <p className="error-message">The localStorage is full</p>
+        <button className="reset" onClick={resetStorageValues}>
+          Reset localStorage
+        </button>
+      </div>
+    );
+  }
+
+  if (currency.length === 0) {
+    return <p>Loading...</p>;
+  }
+
+  const renderValues = () => {
+    return currency.map(({ buy, sale, ccy, base_ccy }) => {
+      let buyNumber = Number(buy).toFixed(2);
+      let saleNumber = Number(sale).toFixed(2);
+      return (
+        <tr className="row" key={ccy}>
+          <td className="headlines-item item">
+            {ccy}/{base_ccy}
+          </td>
+          <td className="buy item">
+            <input className="input_buy" defaultValue={buyNumber} onChange={changeValue} disabled />
+            <span className="edit icon" onClick={handleClickEdit}>
+              ✐
+            </span>
+          </td>
+          <td className="sale item">
+            <input className="input_sale" defaultValue={saleNumber} onChange={changeValue} disabled />
+            <span className="edit icon" onClick={handleClickEdit}>
+              ✐
+            </span>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  return (
+    <table className="table">
+      <thead className="headlines">
+        <tr className="row">
+          <td className="headlines-item item">Currency/Current Date</td>
+          <td className="headlines-item item">Buy</td>
+          <td className="headlines-item item">Sale</td>
+        </tr>
+      </thead>
+      <tbody>{renderValues()}</tbody>
+    </table>
+  );
 }
 
 export default CurrencyTable;

@@ -14,3 +14,32 @@
     padding: 2rem;
     text-align: center;
 }
+
+.edit,
+.cross {
+    vertical-align: super;
+    cursor: pointer;
+}
+
+.input_buy,
+.input_sale {
+    border: none;
+    text-align: center;
+    padding: 0;
+    width: 35%;
+    color: black;
+}
+
+.error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5rem 0;
+    font-size: 2rem;    
+}
+
+.reset {
+    margin: 2rem 0;
+    font-size: 1rem;
+}
