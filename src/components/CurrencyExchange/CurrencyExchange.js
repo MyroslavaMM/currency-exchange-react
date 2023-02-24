@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "./CurrencyExchange.css";
 import { exchange } from "../CurrencyExchangeFunction/CurrencyExchangeFunction";
+import "./CurrencyExchange.css";
 
 function CurrencyExchange() {
   const [changeFrom, setChangeFrom] = useState("");
