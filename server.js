@@ -5,14 +5,14 @@ const axios = require("axios");
 var cors = require("cors");
 app.use(
   cors({
-    origin: "http://127.0.0.1:3000"
+    origin: "https://192.168.241.2:3000"
   })
 );
 app.use(express.static("public"));
 
 app.get("/currency", async function (req, res) {
   const result = await axios.get("http://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "https://vwovyp-3000.preview.csb.app");
   res.send(result.data);
 });
 

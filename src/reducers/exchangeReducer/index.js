@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getExchangeValues = createAsyncThunk("currency/getExchangeValues", async () => {
   try {
-    const response = await axios.get("http://localhost:8080/currency");
+    const response = await axios.get("https://vwovyp-8080.preview.csb.app/currency");
     return response.data;
   } catch (e) {
     console.error(e);
