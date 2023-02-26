@@ -1,70 +1,42 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getExchangeValues, selectExchangeValues } from "../../reducers/exchangeReducer/index";
+import { selectExchangeValues, udateExchangeRate } from "../../reducers/exchangeReducer/index";
+import { OPERATION } from "../CurrencyExchange/CurrencyExchange";
 import "./CurrencyTable.css";
 
 function CurrencyTable() {
   const dispatch = useDispatch();
   const currency = useSelector(selectExchangeValues);
 
-  const [newValue, setNewValue] = useState("");
-  let [count, setCount] = useState(0);
-  const increment = () => setCount(count++);
+  const [activeCCY, setActiveCCY] = useState("");
+  const [activeType, setActiveType] = useState("");
+  const [activeRate, setActiveRate] = useState("");
 
-  useEffect(() => {
-    dispatch(getExchangeValues());
-    increment();
-    window.localStorage.setItem("count", count);
-  }, []);
-
-  const handleClickEdit = (e) => {
-    const child = e.currentTarget;
-    const parent = child.parentNode;
-    let input = parent.childNodes[0];
-
-    child.style.display = "none";
-
-    const span = document.createElement("span");
-    span.innerHTML = "✕";
-    span.classList.add("cross");
-    span.classList.add("icon");
-
-    parent.appendChild(span);
-
-    span.addEventListener("click", () => {
-      span.style.display = "none";
-      child.style.display = "inline-block";
-      input.disabled = true;
-    });
-
-    input.disabled = false;
+  const handleClickEdit = (rate, type, ccy) => {
+    setActiveCCY(ccy);
+    setActiveType(type);
+    setActiveRate(rate);
   };
 
-  const changeValue = (e) => {
-    const currencyValue = e.target.value;
-    setNewValue(currencyValue);
+  const handleRateChange = (event) => {
+    setActiveRate(parseFloat(event.target.value));
   };
 
-  const resetStorageValues = () => {
-    localStorage.clear();
+  const handleSave = () => {
+    setActiveCCY("");
+    setActiveRate("");
+    setActiveType("");
+    dispatch(
+      udateExchangeRate({
+        ccy: activeCCY,
+        type: activeType,
+        rate: activeRate
+      })
+    );
   };
 
   const table = document.getElementsByClassName("table");
-
-  if (localStorage.getItem("count") === "5") {
-    if (table.length > 0) {
-      table[0].style.display = "none";
-    }
-    return (
-      <div className="error">
-        <p className="error-message">The localStorage is full</p>
-        <button className="reset" onClick={resetStorageValues}>
-          Reset localStorage
-        </button>
-      </div>
-    );
-  }
 
   if (currency.length === 0) {
     return <p>Loading...</p>;
@@ -79,21 +51,33 @@ function CurrencyTable() {
           <td className="headlines-item item">
             {ccy}/{base_ccy}
           </td>
-          <td className="buy item">
-            <input className="input_buy" defaultValue={buyNumber} onChange={changeValue} disabled />
-            <span className="edit icon" onClick={handleClickEdit}>
-              ✐
-            </span>
-          </td>
-          <td className="sale item">
-            <input className="input_sale" defaultValue={saleNumber} onChange={changeValue} disabled />
-            <span className="edit icon" onClick={handleClickEdit}>
-              ✐
-            </span>
-          </td>
+          <td className="buy item">{renderOption(buyNumber, OPERATION.BUY, ccy)}</td>
+          <td className="sale item">{renderOption(saleNumber, OPERATION.SALE, ccy)}</td>
         </tr>
       );
     });
+  };
+
+  const renderOption = (rate, type, ccy) => {
+    if (activeCCY === ccy && activeType === type) {
+      return (
+        <>
+          <input className="input_buy" value={activeRate} onChange={handleRateChange} />
+          <span className="edit icon" onClick={handleSave}>
+            ✕
+          </span>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <input className="input_buy" value={rate} disabled />
+          <span className="edit icon" onClick={() => handleClickEdit(rate, type, ccy)}>
+            ✐
+          </span>
+        </>
+      );
+    }
   };
 
   return (
