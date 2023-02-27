@@ -7,7 +7,7 @@ import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
-    <div>
+    <div className="main-block">
       <Header />
       <CurrencyTable />
       <CurrencyExchange />
