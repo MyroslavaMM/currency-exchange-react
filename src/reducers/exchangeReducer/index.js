@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const getExchangeValues = createAsyncThunk("currency/getExchangeValues", async () => {
   const requestCount = parseInt(window.localStorage.getItem("requestCount")) || 0;
 
-  if (requestCount > 5) {
+  if (requestCount >= 15) {
     throw new Error();
   }
   window.localStorage.setItem("requestCount", requestCount + 1);

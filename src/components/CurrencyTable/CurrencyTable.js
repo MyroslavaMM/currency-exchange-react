@@ -1,14 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getExchangeValues, selectExchangeValues, updateValue, selectError, resetError } from "../../reducers/exchangeReducer/index";
+import { getExchangeValues, selectExchangeValues, updateValue } from "../../reducers/exchangeReducer/index";
 import { OPERATION } from "../CurrencyExchange/CurrencyExchange";
 import "./CurrencyTable.css";
 
 function CurrencyTable() {
   const dispatch = useDispatch();
   const currency = useSelector(selectExchangeValues);
-  const storeError = useSelector(selectError);
 
   const [activeValue, setActiveNewValue] = useState("");
   const [activeCCY, setActiveCCY] = useState("");
@@ -43,11 +42,6 @@ function CurrencyTable() {
     setActiveNewValue(currencyValue);
   };
 
-  const resetStorageError = () => {
-    dispatch(resetError());
-    dispatch(getExchangeValues());
-  };
-
   const renderButtons = () => {
     return (
       <>
@@ -80,19 +74,6 @@ function CurrencyTable() {
       );
     }
   };
-
-  if (storeError === true) {
-    return (
-      <div>
-        <div className="error">
-          <p className="error-message">The localStorage is full</p>
-          <button className="reset btn btn-warning" onClick={resetStorageError}>
-            Reset localStorage
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   if (currency.length === 0) {
     return <p>Loading...</p>;
