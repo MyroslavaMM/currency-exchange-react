@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectExchangeValues } from "../../reducers/exchangeReducer/index";
+import { ReactComponent as ArrowsIcon } from "../../images/ArrowsIcon.svg";
 import "./CurrencyExchange.css";
 
 export const CURRENCY = {
@@ -107,7 +108,7 @@ function CurrencyExchange() {
         </select>
       </div>
       <button className="exchange-button btn btn-info" onClick={reverseInput}>
-        ⇆
+        <ArrowsIcon />
       </button>
       <div className="exchange-block">
         <input className="exchange-input form-control" onChange={handleChangeToAmount} value={toAmount} type="number" placeholder="Get" name="get" />

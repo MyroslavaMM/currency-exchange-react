@@ -1,70 +1,76 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getExchangeValues, selectExchangeValues } from "../../reducers/exchangeReducer/index";
+import { getExchangeValues, selectExchangeValues, updateValue } from "../../reducers/exchangeReducer/index";
+import { OPERATION } from "../CurrencyExchange/CurrencyExchange";
+import { ReactComponent as CheckMark } from "../../images/CheckMark.svg";
+import { ReactComponent as CrossIcon } from "../../images/CrossIcon.svg";
+import { ReactComponent as EditIcon } from "../../images/EditIcon.svg";
 import "./CurrencyTable.css";
 
 function CurrencyTable() {
   const dispatch = useDispatch();
   const currency = useSelector(selectExchangeValues);
 
-  const [newValue, setNewValue] = useState("");
-  let [count, setCount] = useState(0);
-  const increment = () => setCount(count++);
+  const [activeValue, setActiveNewValue] = useState("");
+  const [activeCCY, setActiveCCY] = useState("");
+  const [activeType, setActiveType] = useState("");
+  const [activeInput, setActiveInput] = useState(false);
 
   useEffect(() => {
     dispatch(getExchangeValues());
-    increment();
-    window.localStorage.setItem("count", count);
   }, []);
 
-  const handleClickEdit = (e) => {
-    const child = e.currentTarget;
-    const parent = child.parentNode;
-    let input = parent.childNodes[0];
-
-    child.style.display = "none";
-
-    const span = document.createElement("span");
-    span.innerHTML = "✕";
-    span.classList.add("cross");
-    span.classList.add("icon");
-
-    parent.appendChild(span);
-
-    span.addEventListener("click", () => {
-      span.style.display = "none";
-      child.style.display = "inline-block";
-      input.disabled = true;
-    });
-
-    input.disabled = false;
+  const handleClickEdit = (rate, ccy, operation) => {
+    setActiveInput(true);
+    setActiveCCY(ccy);
+    setActiveType(operation);
+    setActiveNewValue(rate);
   };
 
-  const changeValue = (e) => {
-    const currencyValue = e.target.value;
-    setNewValue(currencyValue);
+  const handleSave = () => {
+    setActiveInput(false);
+    dispatch(updateValue({ ccy: activeCCY, operation: activeType, rate: activeValue }));
   };
 
-  const resetStorageValues = () => {
-    localStorage.clear();
+  const handleClose = () => {
+    setActiveInput(false);
+    setActiveCCY("");
+    setActiveType("");
+    setActiveNewValue("");
   };
 
-  const table = document.getElementsByClassName("table");
+  const changeValue = (event) => {
+    const currencyValue = event.target.value;
+    setActiveNewValue(currencyValue);
+  };
 
-  if (localStorage.getItem("count") === "5") {
-    if (table.length > 0) {
-      table[0].style.display = "none";
-    }
+  const renderButtons = () => {
     return (
-      <div className="error">
-        <p className="error-message">The localStorage is full</p>
-        <button className="reset" onClick={resetStorageValues}>
-          Reset localStorage
-        </button>
-      </div>
+      <>
+        <CheckMark onClick={handleSave} />
+        <CrossIcon onClick={handleClose} />
+      </>
     );
-  }
+  };
+
+  const renderOptions = (rate, operation, ccy) => {
+    if (activeInput === true && activeCCY === ccy && activeType === operation) {
+      return (
+        <>
+          <input className="input" value={activeValue} onChange={changeValue} />
+          {renderButtons()}
+        </>
+      );
+    } else {
+      return (
+        <>
+          <input className="input" value={rate} disabled />
+          <EditIcon onClick={() => handleClickEdit(rate, ccy, operation)} />
+        </>
+      );
+    }
+  };
 
   if (currency.length === 0) {
     return <p>Loading...</p>;
@@ -79,34 +85,26 @@ function CurrencyTable() {
           <td className="headlines-item item">
             {ccy}/{base_ccy}
           </td>
-          <td className="buy item">
-            <input className="input_buy" defaultValue={buyNumber} onChange={changeValue} disabled />
-            <span className="edit icon" onClick={handleClickEdit}>
-              ✐
-            </span>
-          </td>
-          <td className="sale item">
-            <input className="input_sale" defaultValue={saleNumber} onChange={changeValue} disabled />
-            <span className="edit icon" onClick={handleClickEdit}>
-              ✐
-            </span>
-          </td>
+          <td className="buy item">{renderOptions(buyNumber, OPERATION.BUY, ccy)}</td>
+          <td className="sale item">{renderOptions(saleNumber, OPERATION.SALE, ccy)}</td>
         </tr>
       );
     });
   };
 
   return (
-    <table className="table-item ">
-      <thead className="headlines">
-        <tr className="row-item">
-          <th className="headlines-item item">Currency/Current Date</th>
-          <th className="headlines-item item">Buy</th>
-          <th className="headlines-item item">Sale</th>
-        </tr>
-      </thead>
-      <tbody>{renderValues()}</tbody>
-    </table>
+    <>
+      <table className="table-item ">
+        <thead className="headlines">
+          <tr className="row-item">
+            <th className="headlines-item item">Currency/Current Date</th>
+            <th className="headlines-item item">Buy</th>
+            <th className="headlines-item item">Sale</th>
+          </tr>
+        </thead>
+        <tbody>{renderValues()}</tbody>
+      </table>
+    </>
   );
 }
 

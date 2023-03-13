@@ -13,18 +13,11 @@
     text-align: center;
 }
 
-.edit,
-.cross {
-    vertical-align: super;
-    cursor: pointer;
-}
-
-.input_buy,
-.input_sale {
+.input {
     border: none;
     text-align: center;
     padding: 0;
-    width: 35%;
+    width: 26%;
     color: black;
     background-color: white;;
 }
@@ -38,13 +31,22 @@
     font-size: 2rem;    
 }
 
+.edit-icon,
+.check-mark,
+.cross-icon {
+    width: 12px;
+    height: 12px;
+    vertical-align: super;
+    cursor: pointer;
+}
+
 .reset {
     margin: 2rem 0;
     font-size: 1rem;
 }
 
-.exchangeInput::-webkit-outer-spin-button,
-.exchangeInput::-webkit-inner-spin-button {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
